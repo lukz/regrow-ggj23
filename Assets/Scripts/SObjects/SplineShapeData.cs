@@ -9,5 +9,8 @@ namespace Roots.SObjects
     {
         [field: SerializeField]
         public List<float3> Points { get; set; }
+
+        [field: SerializeField] 
+        public float StartingAngle { get; private set; } = 270f;
     }
 }

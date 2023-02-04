@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using DG.Tweening;
+using Roots.SObjects;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Splines;
-using Random = System.Random;
 
 namespace Roots
 {
@@ -109,6 +107,28 @@ namespace Roots
 
         private List<float3> _points;
 
+        private void Awake()
+        {
+            Debug.Log(_points);
+            if (_points == null ||_points.Count == 0)
+            {
+                Debug.Log("TEST " + _points?.Count);
+                LoadFromSpline();
+                
+            }
+
+            var mf = GetComponent<MeshFilter>();
+            mf.mesh = Instantiate(mf.mesh);
+        }
+
+        public void LoadFromSpline()
+        {
+            if (m_Container.Spline == null) 
+                return;
+            
+            SetPoints(Spline.Select(knot => knot.Position).ToList());
+        }
+
         void Reset()
         {
             TryGetComponent(out m_Container);
@@ -144,7 +164,7 @@ namespace Roots
 
             RebuildMesh();
         }
-        
+
         private void RebuildMesh()
         {
             if(m_Mesh == null && (m_Mesh = GetComponent<MeshFilter>().sharedMesh) == null)
@@ -166,12 +186,37 @@ namespace Roots
             RebuildSpline();
             RebuildMesh();
         }
-        
+
+        public void AppendRotatedPointsKeepSize(SplineShapeData data) 
+            => AppendRotatedPointsKeepSize(data.Points, data.StartingAngle);
+
+        public void AppendRotatedPointsKeepSize(List<float3> points, float angle)
+        {
+            var diff = Spline[^1].Position - Spline[^2].Position;
+            var endDirection = new Vector2(diff.x, diff.z);
+            
+            var pointsDirection = new Vector2(0, 1);
+            pointsDirection = pointsDirection.SetAngle(angle + 180);
+            var angleDiff = Vector2.SignedAngle(endDirection, pointsDirection);
+
+            var rotatedPoints = new List<float3>();
+            foreach (var point in points)
+            {
+                var rotatedPoint = new Vector2(point.x, point.z);
+                rotatedPoint = rotatedPoint.RotateRad(-angleDiff * Mathf.Deg2Rad);
+                rotatedPoints.Add(new float3(rotatedPoint.x, point.y, rotatedPoint.y));
+            }
+
+            AppendPointsKeepSize(rotatedPoints);
+        }
+
         public void AppendPointsKeepSize(List<float3> points)
         {
             var prevLength = Spline.GetLength();
+            var lastPoint = _points[^1];
             
-            _points.AddRange(points);
+            points.ForEach(r => _points.Add(lastPoint + r));
+            
             RebuildSpline();
             
             var newLength = Spline.GetLength();
@@ -186,7 +231,7 @@ namespace Roots
         {
             StartCoroutine(AnimateFull());
         }
-        
+
         private IEnumerator AnimateFull()
         {
             yield return DOVirtual.Float(0, 1, 2, value =>
@@ -195,12 +240,12 @@ namespace Roots
                 RebuildMesh();
             }).SetEase(Ease.OutSine).WaitForCompletion();
         }
-        
+
         public void StartAnimateAddition()
         {
             StartCoroutine(AnimateAddition());
         }
-        
+
         private IEnumerator AnimateAddition()
         {
             yield return DOVirtual.Float(m_Range.y, 1, 2, value =>
@@ -208,17 +253,6 @@ namespace Roots
                 m_Range.y = value;
                 RebuildMesh();
             }).SetEase(Ease.OutSine).WaitForCompletion();
-        }
-
-        public void LoadFromSpline()
-        {
-            if (m_Container.Spline == null) return;
-            List<float3> points = new List<float3>();
-            foreach (var knot in m_Container.Spline.Knots)
-            {
-                points.Add(knot.Position);
-            }
-            SetPoints(points);
         }
 
         void OnValidate()
