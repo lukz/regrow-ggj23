@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Roots.SObjects;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -13,10 +10,6 @@ namespace Roots
     public class SplineShapeEditor : MonoBehaviour
     {
         [SerializeField] private SplineShapeData _data;
-
-        private void OnValidate()
-        {
-        }
 
         [ContextMenu("Save")]
         private void Save()
