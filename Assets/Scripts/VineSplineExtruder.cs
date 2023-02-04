@@ -100,6 +100,12 @@ namespace Roots
             get => m_Range;
             set => m_Range = new Vector2(Mathf.Min(value.x, value.y), Mathf.Max(value.x, value.y));
         }
+        
+        public Vector2 ScaleRange
+        {
+            get => m_ScaleRange;
+            set => m_ScaleRange = value;
+        }
 
         public Spline Spline => m_Container.Spline;
 
@@ -214,9 +220,15 @@ namespace Roots
         {
             var prevLength = Spline.GetLength();
             var lastPoint = _points[^1];
-            
+
+            // we get an ugly loop when there are two in same spot
+            if (Approximately(points[0], float3.zero, .1f))
+            {
+                points = points.GetRange(1, points.Count - 1);
+            }
+
             points.ForEach(r => _points.Add(lastPoint + r));
-            
+
             RebuildSpline();
             
             var newLength = Spline.GetLength();
@@ -225,6 +237,12 @@ namespace Roots
             m_Range.y = alpha;
 
             RebuildMesh();
+        }
+
+        // extension? 
+        private static bool Approximately(float3 a, float3 b, float tolerance)
+        {
+            return Math.Abs(a.x - b.x) < tolerance && Math.Abs(a.y - b.y) < tolerance && Math.Abs(a.z - b.z) < tolerance;
         }
 
         public void StartAnimateFull()
@@ -253,6 +271,12 @@ namespace Roots
                 m_Range.y = value;
                 RebuildMesh();
             }).SetEase(Ease.OutSine).OnComplete(OnComplete).WaitForCompletion();
+        }
+
+        public void FullSize()
+        {
+            m_Range.y = 1;
+            RebuildMesh();
         }
 
         void OnValidate()
