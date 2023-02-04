@@ -12,5 +12,8 @@ namespace Roots.SObjects
 
         [field: SerializeField] 
         public float StartingAngle { get; private set; } = 270f;
+
+        [field: SerializeField]
+        public string CardName  { get; private set; }
     }
 }

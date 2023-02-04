@@ -241,18 +241,18 @@ namespace Roots
             }).SetEase(Ease.OutSine).WaitForCompletion();
         }
 
-        public void StartAnimateAddition()
+        public void StartAnimateAddition(TweenCallback OnDone)
         {
-            StartCoroutine(AnimateAddition());
+            StartCoroutine(AnimateAddition( OnDone));
         }
 
-        private IEnumerator AnimateAddition()
+        private IEnumerator AnimateAddition(TweenCallback OnComplete)
         {
             yield return DOVirtual.Float(m_Range.y, 1, 2, value =>
             {
                 m_Range.y = value;
                 RebuildMesh();
-            }).SetEase(Ease.OutSine).WaitForCompletion();
+            }).SetEase(Ease.OutSine).OnComplete(OnComplete).WaitForCompletion();
         }
 
         void OnValidate()

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Roots.SObjects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Roots
@@ -18,10 +20,10 @@ namespace Roots
 
         public int Uses = 0;
 
-        public CardSO CardSo;
-        public void Setup(CardSO cardSo)
+        public SplineShapeData splineShapeData;
+        public void Setup(SplineShapeData splineShapeData)
         {
-            CardSo = cardSo;
+            this.splineShapeData = splineShapeData;
             Uses += 1;
             UpdateText();
         }
@@ -44,7 +46,7 @@ namespace Roots
 
         private void UpdateText()
         {
-            Text.SetText(CardSo.cardName + " " + Uses);
+            Text.SetText(splineShapeData.CardName + " " + Uses);
         }
     }
 }

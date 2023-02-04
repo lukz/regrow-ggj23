@@ -16,7 +16,7 @@ namespace Roots
         void AddShape()
         {
             _extruder.AppendRotatedPointsKeepSize(_shapeData.Points, _shapeData.StartingAngle);
-            _extruder.StartAnimateAddition();
+            _extruder.StartAnimateAddition(() => {});
         }
     }
 }

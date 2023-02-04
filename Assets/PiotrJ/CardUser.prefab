@@ -45,7 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardsUI: {fileID: 0}
-  CardSos:
-  - {fileID: 11400000, guid: 63e7f5102adc84831a6c7b424c30dd64, type: 2}
-  - {fileID: 11400000, guid: 30654f82087fb409f94c0751f5f338ff, type: 2}
-  - {fileID: 11400000, guid: 9886b3f02ebfd4d968bc352a906e89f0, type: 2}
+  SplineShapes:
+  - {fileID: 11400000, guid: f42e6b15b286c43688be09252a246dd9, type: 2}

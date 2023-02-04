@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Roots.SObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,19 +19,19 @@ namespace Roots
         protected CardScript Selected;
 
 
-        protected Dictionary<CardSO, CardScript> CardScripts = new();
+        protected Dictionary<SplineShapeData, CardScript> CardScripts = new();
 
 
-        public void AddCard(CardSO cardSo)
+        public void AddCard(SplineShapeData splineShapeData)
         {
             CardScript cardScript;
-            if (!CardScripts.TryGetValue(cardSo, out cardScript))
+            if (!CardScripts.TryGetValue(splineShapeData, out cardScript))
             {
                 cardScript = Instantiate(Prefab, CardsGroup.gameObject.transform);
-                CardScripts[cardSo] = cardScript;
+                CardScripts[splineShapeData] = cardScript;
                 cardScript.OnCardClicked += OnCardClicked;
             }
-            cardScript.Setup(cardSo);
+            cardScript.Setup(splineShapeData);
         }
 
         private void OnCardClicked(CardScript obj)
@@ -39,17 +39,17 @@ namespace Roots
             OnCardSelected?.Invoke(obj);
         }
 
-        public void UseCard(CardSO cardSo)
+        public void UseCard(SplineShapeData splineShapeData)
         {
             CardScript cardScript;
-            if (!CardScripts.TryGetValue(cardSo, out cardScript)) return;
+            if (!CardScripts.TryGetValue(splineShapeData, out cardScript)) return;
             
             if (cardScript.Use())
             {
                 if (cardScript.Uses == 0)
                 {
                     cardScript.OnCardClicked -= OnCardClicked;
-                    CardScripts.Remove(cardSo);
+                    CardScripts.Remove(splineShapeData);
                     OnCardUnselected?.Invoke(cardScript);
                     Destroy(cardScript.gameObject);
                 }

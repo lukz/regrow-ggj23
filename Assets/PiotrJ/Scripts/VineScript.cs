@@ -17,7 +17,7 @@ namespace Roots
         }
 
         [ContextMenu("Update End Point")]
-        void UpdateEndPoint()
+        public void UpdateEndPoint()
         {
             EndPoint.transform.localPosition = Extruder.Spline.EvaluatePosition(1);
         }
