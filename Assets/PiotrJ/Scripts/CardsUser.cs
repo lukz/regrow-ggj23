@@ -34,28 +34,21 @@ namespace Roots
         {
             if (Input.GetMouseButtonDown(0) && selected != null && !isLocked)
             {
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("CardTarget"))
-                    {
-                        isLocked = true;
-                        cardsUI.UseCard(selected.splineShapeData);
-                        var extruder = hit.collider.gameObject.GetComponentInParent<VineSplineExtruder>();
-                        extruder.AppendRotatedPointsKeepSize(selected.splineShapeData);
-                        extruder.StartAnimateAddition(() =>
-                        {
-                            // animate, onSplineChange?
-                            var vine = hit.collider.gameObject.GetComponentInParent<VineScript>();
-                            vine.UpdateEndPoint();
-                            isLocked = false;
-                        });
-                        
-                    }
-                }
+                UseCardAtMouse();
             }
         }
-        
+
+        private void UseCardAtMouse()
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out var hit)) return;
+            
+            var endPoint = hit.collider.gameObject.GetComponent<VineEndPoint>();
+            if (endPoint == null) return;
+
+            isLocked = true;
+            endPoint.Append(selected.splineShapeData, () => { isLocked = false; });
+            cardsUI.UseCard(selected.splineShapeData);
+        }
     }
 }
