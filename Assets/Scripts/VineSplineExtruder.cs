@@ -182,7 +182,12 @@ namespace Roots
             RebuildMesh();
         }
 
-        private IEnumerable AnimateFull()
+        public void StartAnimateFull()
+        {
+            StartCoroutine(AnimateFull());
+        }
+        
+        private IEnumerator AnimateFull()
         {
             yield return DOVirtual.Float(0, 1, 2, value =>
             {
@@ -191,13 +196,29 @@ namespace Roots
             }).SetEase(Ease.OutSine).WaitForCompletion();
         }
         
-        private IEnumerable AnimateAddition()
+        public void StartAnimateAddition()
+        {
+            StartCoroutine(AnimateAddition());
+        }
+        
+        private IEnumerator AnimateAddition()
         {
             yield return DOVirtual.Float(m_Range.y, 1, 2, value =>
             {
                 m_Range.y = value;
                 RebuildMesh();
             }).SetEase(Ease.OutSine).WaitForCompletion();
+        }
+
+        public void LoadFromSpline()
+        {
+            if (m_Container.Spline == null) return;
+            List<float3> points = new List<float3>();
+            foreach (var knot in m_Container.Spline.Knots)
+            {
+                points.Add(knot.Position);
+            }
+            SetPoints(points);
         }
 
         void OnValidate()
