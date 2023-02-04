@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,24 +15,14 @@ namespace Roots
 {
     public class VineSplineExtruder : MonoBehaviour
     {
-        [FormerlySerializedAs("m_widthData")] [SerializeField]
-        List<SplineData<float>> m_radiusData = new List<SplineData<float>>();
-        
+        [SerializeField, Tooltip("Start an end scale")]
+        Vector2 m_ScaleRange = new Vector2(1f, .5f);
         
         [SerializeField, Tooltip("The Spline to extrude.")]
         SplineContainer m_Container;
 
-        [SerializeField, Tooltip("Enable to regenerate the extruded mesh when the target Spline is modified. Disable " +
-             "this option if the Spline will not be modified at runtime.")]
-        bool m_RebuildOnSplineChange;
-
         [SerializeField, Tooltip("The maximum number of times per-second that the mesh will be rebuilt.")]
         int m_RebuildFrequency = 30;
-
-        [SerializeField, Tooltip("Automatically update any Mesh, Box, or Sphere collider components when the mesh is extruded.")]
-#pragma warning disable 414
-        bool m_UpdateColliders = true;
-#pragma warning restore 414
 
         [SerializeField, Tooltip("The number of sides that comprise the radius of the mesh.")]
         int m_Sides = 8;
@@ -51,44 +42,12 @@ namespace Roots
         
         Mesh m_Mesh;
         bool m_RebuildRequested;
-        float m_NextScheduledRebuild;
 
-        /// <summary>The SplineContainer of the <see cref="Spline"/> to extrude.</summary>
-        [Obsolete("Use Container instead.", false)]
-        public SplineContainer container => Container;
         /// <summary>The SplineContainer of the <see cref="Spline"/> to extrude.</summary>
         public SplineContainer Container
         {
             get => m_Container;
             set => m_Container = value;
-        }
-
-        /// <summary>
-        /// Enable to regenerate the extruded mesh when the target Spline is modified. Disable this option if the Spline
-        /// will not be modified at runtime.
-        /// </summary>
-        [Obsolete("Use RebuildOnSplineChange instead.", false)]
-        public bool rebuildOnSplineChange => RebuildOnSplineChange;
-
-        /// <summary>
-        /// Enable to regenerate the extruded mesh when the target Spline is modified. Disable this option if the Spline
-        /// will not be modified at runtime.
-        /// </summary>
-        public bool RebuildOnSplineChange
-        {
-            get => m_RebuildOnSplineChange;
-            set => m_RebuildOnSplineChange = value;
-        }
-
-        /// <summary>The maximum number of times per-second that the mesh will be rebuilt.</summary>
-        [Obsolete("Use RebuildFrequency instead.", false)]
-        public int rebuildFrequency => RebuildFrequency;
-
-        /// <summary>The maximum number of times per-second that the mesh will be rebuilt.</summary>
-        public int RebuildFrequency
-        {
-            get => m_RebuildFrequency;
-            set => m_RebuildFrequency = Mathf.Max(value, 1);
         }
 
         /// <summary>How many sides make up the radius of the mesh.</summary>
@@ -100,10 +59,6 @@ namespace Roots
             get => m_Sides;
             set => m_Sides = Mathf.Max(value, 3);
         }
-
-        /// <summary>How many edge loops comprise the one unit length of the mesh.</summary>
-        [Obsolete("Use SegmentsPerUnit instead.", false)]
-        public float segmentsPerUnit => SegmentsPerUnit;
 
         /// <summary>How many edge loops comprise the one unit length of the mesh.</summary>
         public float SegmentsPerUnit
@@ -149,21 +104,11 @@ namespace Roots
             set => m_Range = new Vector2(Mathf.Min(value.x, value.y), Mathf.Max(value.x, value.y));
         }
 
-        /// <summary>The main Spline to extrude.</summary>
-        [Obsolete("Use Spline instead.", false)]
-        public Spline spline => Spline;
+        public Spline Spline => m_Container.Spline;
 
-        /// <summary>The main Spline to extrude.</summary>
-        public Spline Spline
-        {
-            get => m_Container.Spline;
-        }
+        public IReadOnlyList<Spline> Splines => m_Container.Splines;
 
-        /// <summary>The Splines to extrude.</summary>
-        public IReadOnlyList<Spline> Splines
-        {
-            get => m_Container.Splines;
-        }
+        private List<float3> _points;
 
         void Reset()
         {
@@ -183,7 +128,7 @@ namespace Roots
                 renderer.sharedMaterial = mat;
             }
 
-            Rebuild();
+            RebuildMesh();
         }
 
         void Start()
@@ -198,145 +143,67 @@ namespace Roots
                 Debug.LogError("SplineExtrude.createMeshInstance is disabled, but there is no valid mesh assigned. " +
                     "Please create or assign a writable mesh asset.");
 
-            Rebuild();
+            RebuildMesh();
         }
-
-        void OnEnable()
-        {
-            Spline.Changed += OnSplineChanged;
-        }
-
-        void OnDisable()
-        {
-            Spline.Changed -= OnSplineChanged;
-        }
-
-        void OnSplineChanged(Spline spline, int knotIndex, SplineModification modificationType)
-        {
-            if (m_Container != null && Splines.Contains(spline) && m_RebuildOnSplineChange)
-                m_RebuildRequested = true;
-        }
-
-        void Update()
-        {
-            if(m_RebuildRequested && Time.time >= m_NextScheduledRebuild)
-                Rebuild();
-        }
-
-        /// <summary>
-        /// Triggers the rebuild of a Spline's extrusion mesh and collider.
-        /// </summary>
-        public void Rebuild()
+        
+        private void RebuildMesh()
         {
             if(m_Mesh == null && (m_Mesh = GetComponent<MeshFilter>().sharedMesh) == null)
                 return;
 
-            CustomSplineMesh.Extrude(Splines, m_Mesh, m_Radius, m_radiusData, m_Sides, m_SegmentsPerUnit, m_Capped, m_Range);
-            m_NextScheduledRebuild = Time.time + 1f / m_RebuildFrequency;
-
-#if UNITY_PHYSICS_MODULE
-            if (m_UpdateColliders)
-            {
-                if (TryGetComponent<MeshCollider>(out var meshCollider))
-                    meshCollider.sharedMesh = m_Mesh;
-
-                if (TryGetComponent<BoxCollider>(out var boxCollider))
-                {
-                    boxCollider.center = m_Mesh.bounds.center;
-                    boxCollider.size = m_Mesh.bounds.size;
-                }
-
-                if (TryGetComponent<SphereCollider>(out var sphereCollider))
-                {
-                    sphereCollider.center = m_Mesh.bounds.center;
-                    var ext = m_Mesh.bounds.extents;
-                    sphereCollider.radius = Mathf.Max(ext.x, ext.y, ext.z);
-                }
-            }
-#endif
+            RootMesh.Extrude(Splines, m_Mesh, m_Radius, m_Sides, m_SegmentsPerUnit, m_Capped, m_Range, m_ScaleRange);
         }
 
-        [ContextMenu("Animate full")]
-        private void Animate()
+        private void RebuildSpline()
         {
-            DOVirtual.Float(0, 1, 2, value =>
-            {
-                m_Range.y = value;
-                Rebuild();
-            }).SetEase(Ease.OutSine);
+            var newSpline = SplineFactory.CreateCatmullRom(_points, false);
+            m_Container.Spline = newSpline;
+        }
+
+        public void SetPoints(List<float3> points)
+        {
+            _points = points;
+
+            RebuildSpline();
+            RebuildMesh();
         }
         
-        [ContextMenu("Animate addition")]
-        private void AnimateAddition()
+        public void AppendPointsKeepSize(List<float3> points)
         {
-            DOVirtual.Float(m_Range.y, 1, 2, value =>
-            {
-                m_Range.y = value;
-                Rebuild();
-            }).SetEase(Ease.OutSine);
-        }
-        
-        
-        [ContextMenu("Add Node")]
-        private void AddNodeAndGrow()
-        {
-            var length = Spline.GetLength();
+            var prevLength = Spline.GetLength();
             
-            var lastNode = Spline[^1];
-            var prevToLastNode = Spline[^2];
-
-            var posDiff = lastNode.Position - prevToLastNode.Position;
-
-            var randDiff = new Vector3(UnityEngine.Random.Range(-1, 1), 0, UnityEngine.Random.Range(-1, 1)).normalized * 10;
-
-            // SplineFactory.CreateCatmullRom()
-            
-
-            var knot = new BezierKnot(lastNode.Position + new float3(randDiff.x, randDiff.y, randDiff.z) , lastNode.TangentIn, lastNode.TangentOut);
-            
-            Spline.Add(knot, TangentMode.AutoSmooth);
-            
-            
+            _points.AddRange(points);
+            RebuildSpline();
             
             var newLength = Spline.GetLength();
-
-            var alpha = length / newLength;
+            var alpha = prevLength / newLength;
 
             m_Range.y = alpha;
-            
-            Rebuild();
-            // AnimateAddition();
+
+            RebuildMesh();
         }
 
-        [ContextMenu("Validate")]
+        private IEnumerable AnimateFull()
+        {
+            yield return DOVirtual.Float(0, 1, 2, value =>
+            {
+                m_Range.y = value;
+                RebuildMesh();
+            }).SetEase(Ease.OutSine).WaitForCompletion();
+        }
+        
+        private IEnumerable AnimateAddition()
+        {
+            yield return DOVirtual.Float(m_Range.y, 1, 2, value =>
+            {
+                m_Range.y = value;
+                RebuildMesh();
+            }).SetEase(Ease.OutSine).WaitForCompletion();
+        }
+
         void OnValidate()
         {
-            Rebuild();
-            
-            var data = new SplineData<float>();
-            data.PathIndexUnit = PathIndexUnit.Normalized;
-            
-            m_radiusData.Clear();
-            m_radiusData.Add(data);
-
-            var steps = 50;
-
-            for (int i = 0; i <= steps; i++)
-            {
-                
-                var flippedSign = (i % 2 == 0) ? -1 : 1;
-                var offset = 0.04f * flippedSign + UnityEngine.Random.Range(-0.01f, 0.01f);
-                
-                var index = 1 - i / (float)steps;
-                var value = i / (float)steps;
-
-                if (i != 0 && i != steps)
-                {
-                    value += offset;
-                }
-
-                data.Add(new DataPoint<float>(index, value));
-            }
+            RebuildMesh();
         }
 
         internal Mesh CreateMeshAsset()
