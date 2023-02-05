@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7106078360451032586}
   - component: {fileID: 7106078360451032587}
   - component: {fileID: 7106078360451032584}
+  - component: {fileID: 6376093678951664449}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 77a998289b4974ce8b56e4fe94b38fc2, type: 2}
+  - {fileID: 2100000, guid: 7da420af144ef4d1590c7adb2dc11f6f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,6 +107,26 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6376093678951664449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7106078360451032585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d1fbc260c584b48a45a786f3a1a978, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 5905009700397230639, guid: 2e3c595918c0e42e0985b5cf9d874963, type: 3}
+  - {fileID: 5354010724730801647, guid: 9c9f3df7783da4e7f8aca081439eaf3c, type: 3}
+  - {fileID: 2059058631031274870, guid: 0dfaa3708456640b786b8830cb4a7f9c, type: 3}
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 10, y: 0, z: 10}
+  count: 100
 --- !u!1 &7106078362047620437
 GameObject:
   m_ObjectHideFlags: 0
