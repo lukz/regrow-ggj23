@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Roots
 {
@@ -32,7 +33,8 @@ namespace Roots
         {
             for (int i = 0; i < leaves.Length; i++)
             {
-                leaves[i].transform.DOScale(leafScales[i], duration);
+                leaves[i].transform.DOKill();
+                leaves[i].transform.DOScale(leafScales[i], duration).SetDelay(Random.Range(0, duration/2));
             }
         }
 
@@ -41,7 +43,8 @@ namespace Roots
         {
             foreach (var leaf in leaves)
             {
-                leaf.transform.DOScale(new Vector3(0, 0, 0), duration);
+                leaf.transform.DOKill();
+                leaf.transform.DOScale(new Vector3(0, 0, 0), duration).SetDelay(Random.Range(0, duration/2));
             }
         }
     }
