@@ -47,7 +47,7 @@ namespace Roots
 
                 foreach (var (endPoint, endPointPosition) in endPointTuples)
                 {
-                    var nearbyTree = GetTreeNearby(endPointPosition, endPoint, treeScript);
+                    var nearbyTree = GetTreeNearby(endPointPosition, treeScript);
                     if (nearbyTree != null)
                     {
                         Debug.Log("Found tree nearby ", endPoint);
@@ -56,14 +56,11 @@ namespace Roots
             }
         }
 
-        public TreeScript GetTreeNearby(Vector3 position, VineEndPoint vineEndPoint, TreeScript excludeTree = null)
+        public TreeScript GetTreeNearby(Vector3 position, TreeScript excludeTree = null)
         {
             foreach (var treeScript in trees.Where(r => r != excludeTree))
             {
                 var data = App.instance.appData.data;
-                
-                Debug.Log(Vector3.Distance(treeScript.transform.position, position), vineEndPoint);
-                
                 if (Vector3.Distance(treeScript.transform.position, position) < data.TreeSnappingDistance)
                 {
                     return treeScript;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Roots.SObjects;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -110,6 +111,8 @@ namespace Roots
         public Spline Spline => m_Container.Spline;
 
         public IReadOnlyList<Spline> Splines => m_Container.Splines;
+        
+        public List<float3> Points => _points;
 
         private List<float3> _points;
 
@@ -120,6 +123,11 @@ namespace Roots
                 LoadFromSpline();
             }
 
+            DuplicateMesh();
+        }
+
+        private void DuplicateMesh()
+        {
             var mf = GetComponent<MeshFilter>();
             mf.mesh = Instantiate(mf.mesh);
         }
@@ -128,7 +136,7 @@ namespace Roots
         {
             if (m_Container.Spline == null) 
                 return;
-            
+
             SetPoints(Spline.Select(knot => knot.Position).ToList());
         }
 

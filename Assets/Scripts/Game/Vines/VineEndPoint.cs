@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Roots.SObjects;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Roots
     public class VineEndPoint : MonoBehaviour
     {
         public VineSplineExtruder Extruder;
-        private VineSplineExtruder previewExtruder;
+        public VineSplineExtruder PreviewExtruder;
         public Material previewMaterial;
 
         public event Action<CardData> OnGrowthRequested;
@@ -54,31 +55,26 @@ namespace Roots
             StopPreview();
             var prevLength = Extruder.Spline.GetLength();
             
-            previewExtruder = Instantiate(Extruder, transform.parent);
-            previewExtruder.ScaleRange = new Vector2((previewExtruder.ScaleRange.x + previewExtruder.ScaleRange.y)/2, previewExtruder.ScaleRange.y);
+            PreviewExtruder.gameObject.SetActive(true);
+            PreviewExtruder.SetPoints(Extruder.Points.ToList());
             
-            // delay so it doesnt change Extruder mesh as well :shrug:
-            previewExtruder.transform.DOLocalMove(new Vector3(), 1/30f).OnComplete(() =>
-            {
-                previewExtruder.AppendRotatedPointsKeepSize(shapeData);
-                // move start of preview spline to end of actual one
-                var newLength = previewExtruder.Spline.GetLength();
-                var alpha = prevLength / newLength;
+            PreviewExtruder.ScaleRange = new Vector2((PreviewExtruder.ScaleRange.x + PreviewExtruder.ScaleRange.y)/2, PreviewExtruder.ScaleRange.y);
+            PreviewExtruder.AppendRotatedPointsKeepSize(shapeData);
+            // move start of preview spline to end of actual one
+            var newLength = PreviewExtruder.Spline.GetLength();
+            var alpha = prevLength / newLength;
                 
-                previewExtruder.Range = new Vector2(alpha, 1);
+            PreviewExtruder.Range = new Vector2(alpha, 1);
                 
-                previewExtruder.FullSize();
-                previewExtruder.GetComponent<MeshRenderer>().material = previewMaterial;
-            });
+            PreviewExtruder.FullSize();
+            PreviewExtruder.GetComponent<MeshRenderer>().material = previewMaterial;
 
-            return previewExtruder.Spline.EvaluatePosition(1);
+            return transform.parent.TransformPoint(PreviewExtruder.Spline.EvaluatePosition(1));
         }
 
         public void StopPreview()
         {
-            if (previewExtruder == null) return;
-            previewExtruder.transform.DOKill();
-            Destroy(previewExtruder.gameObject);
+            PreviewExtruder.gameObject.SetActive(false);
         }
     }
 }

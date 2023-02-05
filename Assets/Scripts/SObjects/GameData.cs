@@ -10,7 +10,7 @@ using UnityEngine;
 public class GameData : ScriptableObject
 {
 	[field: SerializeField] 
-	public int TreeSnappingDistance { get; private set; } = 1;
+	public int TreeSnappingDistance { get; private set; } = 3;
 	
 	
 	public GameState gameState;
