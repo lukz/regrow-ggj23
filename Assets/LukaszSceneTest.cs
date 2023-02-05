@@ -10,7 +10,7 @@ namespace Roots
         [SerializeField] private SplineContainer _spline;
         [SerializeField] private VineSplineExtruder _extruder;
         
-        [SerializeField] private SplineShapeData _shapeData;
+        [SerializeField] private CardData _shapeData;
         
         [ContextMenu("Add shape")]
         void AddShape()

@@ -9,7 +9,7 @@ namespace Roots
 {
     public class SplineShapeEditor : MonoBehaviour
     {
-        [SerializeField] private SplineShapeData _data;
+        [SerializeField] private CardData _data;
 
         [ContextMenu("Save")]
         private void Save()
