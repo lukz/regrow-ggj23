@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -19,5 +20,12 @@ namespace Roots.SObjects
         [field: SerializeField]
         public Texture2D Icon  { get; private set; }
 
+        private void OnValidate()
+        {
+            for (var index = 0; index < Points.Count; index++)
+            {
+                Points[index] = new float3(Points[index].x, 0, Points[index].z);
+            }
+        }
     }
 }
