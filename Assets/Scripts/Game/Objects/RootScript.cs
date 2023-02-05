@@ -6,7 +6,8 @@ using UnityEngine.Splines;
 
 namespace Roots
 {
-    public class VineScript : MonoBehaviour
+    [SelectionBase]
+    public class RootScript : MonoBehaviour
     {
         public GameObject EndPoint;
         public VineSplineExtruder Extruder;

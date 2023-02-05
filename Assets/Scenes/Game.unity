@@ -302,6 +302,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1032826782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7106078362047620436, guid: 047188328541d0a46bf9996653796d81,
+    type: 3}
+  m_PrefabInstance: {fileID: 7106078360719329901}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1145144554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -490,6 +496,11 @@ PrefabInstance:
       propertyPath: game
       value: 
       objectReference: {fileID: 1145144555}
+    - target: {fileID: 392482209637118353, guid: fec52d70de49ad341b34a8513f218f00,
+        type: 3}
+      propertyPath: field
+      value: 
+      objectReference: {fileID: 1032826782}
     - target: {fileID: 392482209637118353, guid: fec52d70de49ad341b34a8513f218f00,
         type: 3}
       propertyPath: camera
@@ -846,8 +857,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameField
       objectReference: {fileID: 0}
+    - target: {fileID: 8019308601464574917, guid: 047188328541d0a46bf9996653796d81,
+        type: 3}
+      propertyPath: roots.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1419450644650182324, guid: 047188328541d0a46bf9996653796d81, type: 3}
+    - {fileID: 2837784288510198436, guid: 047188328541d0a46bf9996653796d81, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 047188328541d0a46bf9996653796d81, type: 3}

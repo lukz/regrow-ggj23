@@ -12,6 +12,8 @@ public class App : MonoBehaviour
     public AppData appData;
     public GameManager game;
     public UIManager ui;
+    public Transform field;
+    
     public new CameraController camera;
     
     private bool readyToStart;

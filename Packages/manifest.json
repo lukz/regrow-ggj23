@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
     "com.unity.ide.rider": "3.0.18",
     "com.unity.render-pipelines.universal": "14.0.6",
     "com.unity.splines": "2.1.0",
