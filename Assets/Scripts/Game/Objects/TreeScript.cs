@@ -1,5 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
+using Roots.SObjects;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,16 +20,24 @@ namespace Roots
         [Header("Prefabs")]
         [SerializeField] private RootScript rootPrefab;
         
-        
-        void Start()
+        public event Action<TreeScript, RootScript, CardData> OnGrowthRequested;
+
+        private void Start()
         {
-        
+            roots.Clear();
+            roots.AddRange(GetComponentsInChildren<RootScript>());
+
+            foreach (var rootScript in roots)
+            {
+                rootScript.OnGrowthRequested += OnRootGrowthRequested;
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnRootGrowthRequested(RootScript root, CardData card) => OnGrowthRequested?.Invoke(this, root, card);
+
+        public IEnumerator Grow(RootScript root, CardData card)
         {
-        
+            yield return root.Grow(card);
         }
 
 #if UNITY_EDITOR

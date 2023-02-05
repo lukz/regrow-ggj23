@@ -258,16 +258,16 @@ namespace Roots
 
         public void StartAnimateAddition(TweenCallback OnDone)
         {
-            StartCoroutine(AnimateAddition( OnDone));
+            StartCoroutine(AnimateAddition());
         }
 
-        private IEnumerator AnimateAddition(TweenCallback OnComplete)
+        public IEnumerator AnimateAddition()
         {
             yield return DOVirtual.Float(m_Range.y, 1, 2, value =>
             {
                 m_Range.y = value;
                 RebuildMesh();
-            }).SetEase(Ease.OutSine).OnComplete(OnComplete).WaitForCompletion();
+            }).SetEase(Ease.OutSine).WaitForCompletion();
         }
 
         public void FullSize()

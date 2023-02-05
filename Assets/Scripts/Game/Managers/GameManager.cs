@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public InputManager inputManager;
     public SoundManager soundManager;
     public CardsManager cardsManager;
+    public TreeManager treeManager;
     
     // [HideInInspector] public new CameraScript camera;
 
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
         // player.onDead += OnPlayerDeath;
         //
         // enemyManager.onEnemyDied += HandleEnemyDrop;
-        // enemyManager.onEnemyDied += powerUpManager.OnEnemyDeathPowerupSpawn;
+        // enemyMwanager.onEnemyDied += powerUpManager.OnEnemyDeathPowerupSpawn;
         // enemyManager.isTimerPaused += () => { return isGamePaused || isGameStopped; };
         //
         // timeManager.isGameStopped += () => { return isGameStopped; };
@@ -47,6 +48,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cardsManager.OnCardUsed += r => EndPlayerTurn();
+
+        cardsManager.IsInputLocked += () => playerTurnFinished;
+        
+        
         // camera = App.instance.camera.GetComponent<CameraScript>();
 
         // Gameplay
@@ -101,9 +107,9 @@ public class GameManager : MonoBehaviour
             yield return PlayerActions();
             OnPlayerTurnFinished();
             
-            yield return new WaitForSeconds(0.3f);
+            // yield return new WaitForSeconds(2f);
 
-            // yield return TeamMovement();
+            yield return TreeGrowth();
             // yield return TeamDigging();
         }
         
@@ -113,11 +119,12 @@ public class GameManager : MonoBehaviour
     private void OnPlayerTurnStart()
     {
         playerTurnFinished = false;
+        
+        cardsManager.PreviewActualSelection();
     }
 
     private void OnPlayerTurnFinished()
     {
-        
     }
 
 
@@ -133,12 +140,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => playerTurnFinished);
     }
     
-    /*private IEnumerator TeamMovement()
+    private IEnumerator TreeGrowth()
     {
-        yield return teamsManager.HandleMove(SpendTurn);
+        yield return new WaitUntil(() => !treeManager.IsWorking);
     }
     
-    private IEnumerator TeamDigging()
+    /*private IEnumerator TeamDigging()
     {
         yield return teamsManager.HandleDigging(SpendTurn);
     }*/

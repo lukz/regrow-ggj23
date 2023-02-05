@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e6dc6fa4e5047ff94863e607cfd045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EndPoint: {fileID: 5060016860318848851}
+  EndPoint: {fileID: 2319559542920919506}
   Extruder: {fileID: 647312981073127461}
 --- !u!1 &5060016860318848851
 GameObject:

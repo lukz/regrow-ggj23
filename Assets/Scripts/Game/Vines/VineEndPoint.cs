@@ -14,6 +14,8 @@ namespace Roots
         private VineSplineExtruder previewExtruder;
         public Material previewMaterial;
 
+        public event Action<CardData> OnGrowthRequested;
+
         private void Start()
         {
             transform.localScale = new Vector3();
@@ -25,15 +27,15 @@ namespace Roots
             transform.localPosition = Extruder.Spline.EvaluatePosition(1);
         }
 
-        public void Append(CardData shapeData, TweenCallback completed)
+        public void GrowthRequested(CardData cardData) => OnGrowthRequested?.Invoke(cardData);
+
+        public IEnumerator Append(CardData shapeData)
         {
             Extruder.AppendRotatedPointsKeepSize(shapeData);
-            Extruder.StartAnimateAddition(
-                () => {
-                    MoveToEnd();
-                    completed.Invoke();
-                }
-            );
+            
+            yield return Extruder.AnimateAddition();
+            
+            MoveToEnd();
         }
 
         public void Hide()

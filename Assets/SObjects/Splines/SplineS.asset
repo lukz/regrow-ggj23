@@ -16,14 +16,17 @@ MonoBehaviour:
   - x: 0
     y: 0
     z: 0
-  - x: 0.3
+  - x: 0.22
     y: -0.16
-    z: 1.5
-  - x: 1.26
+    z: 1.19
+  - x: 1.43
     y: -0.35
-    z: 2.6908
-  - x: 3.03
+    z: 1.49
+  - x: 2.39
+    y: -0.33
+    z: 1.87
+  - x: 2.51
     y: -0.28
-    z: 2.8108
+    z: 2.87
   <StartingAngle>k__BackingField: 270
   <CardName>k__BackingField: Card S

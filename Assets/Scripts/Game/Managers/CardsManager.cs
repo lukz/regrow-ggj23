@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Roots.SObjects;
+using UnityEditor;
 using UnityEngine;
 
 namespace Roots
@@ -14,6 +15,8 @@ namespace Roots
 
         public event Action<CardData> OnCardUsed;
         public event Action<CardData> OnCardAdded;
+        
+        public event Func<bool> IsInputLocked;
         
         void Start()
         {
@@ -29,7 +32,9 @@ namespace Roots
         public void StartSelection(CardScript card)
         {
             selected = card;
-            if (isLocked) return;
+            
+            if (IsInputLocked!.Invoke()) return;
+            
             ShowEndPoints();
             PreviewEndPoints(card.cardData);
         }
@@ -43,7 +48,7 @@ namespace Roots
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(0) && selected != null && !isLocked)
+            if (Input.GetMouseButtonDown(0) && selected != null)
             {
                 UseCardAtMouse();
             }
@@ -64,19 +69,23 @@ namespace Roots
                 CancelSelection(null);
                 return;
             }
-
-            isLocked = true;
-            endPoint.Append(selected.cardData, () =>
-            {
-                isLocked = false;
-                if (selected == null) return;
-                // selection changed during animation
-                StartSelection(selected);
-            });
+            
+            if(IsInputLocked!.Invoke())
+                return;
+            
+            endPoint.GrowthRequested(selected.cardData);
+            // endPoint.Append(selected.cardData, () => {});
             
             OnCardUsed?.Invoke(selected.cardData);
             
             CancelSelection(null);
+        }
+
+        public void PreviewActualSelection()
+        {
+            if (selected == null) return;
+            
+            StartSelection(selected);
         }
 
         public void AddCard(CardData card)
@@ -84,23 +93,13 @@ namespace Roots
             OnCardAdded?.Invoke(card);
         }
 
-        private void HideEndPoints()
-        {
-            EndPoints.ForEach(point => point.Hide());
-        }
-        private void ShowEndPoints()
-        {
-            EndPoints.ForEach(point => point.Show());
-        }
-        private void PreviewEndPoints(CardData shapeData)
-        {
-            EndPoints.ForEach(point => point.Preview(shapeData));
-        }
-        
-        private void StopPreviewEndPoints()
-        {
-            EndPoints.ForEach(point => point.StopPreview());
-        }
+        private void HideEndPoints() => EndPoints.ForEach(point => point.Hide());
+
+        private void ShowEndPoints() => EndPoints.ForEach(point => point.Show());
+
+        private void PreviewEndPoints(CardData shapeData) => EndPoints.ForEach(point => point.Preview(shapeData));
+
+        private void StopPreviewEndPoints() => EndPoints.ForEach(point => point.StopPreview());
 
         public void AddEndPoint(VineEndPoint vineEndPoint)
         {

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Cards>k__BackingField:
   - {fileID: 11400000, guid: f42e6b15b286c43688be09252a246dd9, type: 2}
+  - {fileID: 11400000, guid: d87a4a79713a4454eb9458e6604e9943, type: 2}
