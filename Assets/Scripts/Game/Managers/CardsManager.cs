@@ -37,6 +37,7 @@ namespace Roots
             
             ShowEndPoints();
             PreviewEndPoints(card.cardData);
+            SoundManager.Instance.PlaySound(SoundManager.SFXType.Select);
         }
 
         public void CancelSelection(CardScript card)
@@ -44,6 +45,7 @@ namespace Roots
             selected = null;
             StopPreviewEndPoints();
             HideEndPoints();
+            SoundManager.Instance.PlaySound(SoundManager.SFXType.Deselect);
         }
 
         void Update()

@@ -44,7 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6fd082cc6839054e84b3ad8e3f8f989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_soundPrefab: {fileID: 0}
+  m_soundPrefab: {fileID: 4823200438495129050, guid: 5a315646aeca9407091febe59dd52b3e,
+    type: 3}
   m_pop: []
-  m_select: {fileID: 0}
+  m_select: {fileID: 8300000, guid: f5a55eb49f3c1487eb6e0d543365e686, type: 3}
+  m_deselect: {fileID: 8300000, guid: 0b3e2657a6ae348ee893f41bd13ba3cc, type: 3}
+  m_newCard: {fileID: 8300000, guid: b2ddb4d9a03cc4d2eb894891fb1b5ae1, type: 3}
+  m_treeAwake: {fileID: 8300000, guid: 9bd697f99c9554c5bb28439ecfa641c6, type: 3}
+  m_grow:
+  - {fileID: 8300000, guid: 2081a140318774909883ee8d68c31e9c, type: 3}
+  - {fileID: 8300000, guid: bdc619cee87e8459aab1f81a17c96cff, type: 3}
+  - {fileID: 8300000, guid: 7a2636dfc9b7846379996fbb6dde3025, type: 3}
+  - {fileID: 8300000, guid: a019ba1fcf0744ebfa5650ff3a797f60, type: 3}
+  - {fileID: 8300000, guid: e684236aa045543648a53edf17f56151, type: 3}
   volumeOverrides: []

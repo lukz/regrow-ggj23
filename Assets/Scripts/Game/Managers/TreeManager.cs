@@ -32,6 +32,8 @@ namespace Roots
         {
             IsWorking = true;
 
+            SoundManager.Instance.PlaySound(SoundManager.SFXType.Grow);
+            
             yield return tree.GrowRootWithCard(root, card);
 
             var targetDeadTree = GetTreeNearby(root.EndPoint.transform.position);
@@ -39,6 +41,7 @@ namespace Roots
             {
                 targetDeadTree.SetAlive(false);
                 root.SetConnected();
+                SoundManager.Instance.PlaySound(SoundManager.SFXType.TreeAwake);
             }
             
             IsWorking = false;

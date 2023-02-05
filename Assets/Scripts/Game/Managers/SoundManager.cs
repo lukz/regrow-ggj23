@@ -9,7 +9,11 @@ public class SoundManager : MonoBehaviour
 	public enum SFXType {
 		None,
 		Pop,
-		Select
+		Select,
+		Deselect,
+		Grow,
+		NewCard,
+		TreeAwake
 	}
 
 	public static SoundManager Instance { get; private set; }
@@ -18,6 +22,11 @@ public class SoundManager : MonoBehaviour
 	
 	[SerializeField] List<AudioClip> m_pop;
 	[SerializeField] AudioClip m_select;
+	[SerializeField] AudioClip m_deselect;
+	[SerializeField] AudioClip m_newCard;
+	[SerializeField] AudioClip m_treeAwake;
+	
+	[SerializeField] List<AudioClip> m_grow;
 	
 	
 	[SerializeField, Header("Volume tuning")]
@@ -61,6 +70,18 @@ public class SoundManager : MonoBehaviour
 				break;
 			case SFXType.Select:
 				targetClip = m_select;
+				break;
+			case SFXType.Deselect:
+				targetClip = m_deselect;
+				break;
+			case SFXType.Grow:
+				targetClip = m_grow.Random();
+				break;
+			case SFXType.NewCard:
+				targetClip = m_newCard;
+				break;
+			case SFXType.TreeAwake:
+				targetClip = m_treeAwake;
 				break;
 			default:
 				break;
