@@ -57,4 +57,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7a2636dfc9b7846379996fbb6dde3025, type: 3}
   - {fileID: 8300000, guid: a019ba1fcf0744ebfa5650ff3a797f60, type: 3}
   - {fileID: 8300000, guid: e684236aa045543648a53edf17f56151, type: 3}
-  volumeOverrides: []
+  volumeOverrides:
+  - sfxType: 5
+    volumeMul: 0.5
