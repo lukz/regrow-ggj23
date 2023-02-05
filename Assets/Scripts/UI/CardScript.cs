@@ -26,7 +26,8 @@ namespace Roots
             this.cardData = cardData;
             Uses += 1;
             UpdateText();
-            Image.sprite = Sprite.Create(cardData.Icon, new Rect(new Vector2(0, 0), new Vector2(512, 512)), new Vector2(256, 256));
+
+            Image.sprite = cardData.Icon;
         }
 
         public void OnClicked()

@@ -18,7 +18,7 @@ namespace Roots.SObjects
         public string CardName  { get; private set; }
 
         [field: SerializeField]
-        public Texture2D Icon  { get; private set; }
+        public Sprite Icon  { get; private set; }
 
         private void OnValidate()
         {
