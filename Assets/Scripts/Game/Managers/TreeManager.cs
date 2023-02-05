@@ -18,24 +18,22 @@ namespace Roots
 
             foreach (var treeScript in trees)
             {
-                treeScript.OnGrowthRequested += GrowTree;
+                treeScript.OnGrowthRequested += GrowRootWithCard;
             }
         }
 
         // TODO: Probably we should schedule growth through GameManager and handle it in trees turn 
-        private void GrowTree(TreeScript tree, RootScript root, CardData card)
+        private void GrowRootWithCard(TreeScript tree, RootScript root, CardData card)
         {
-            StartCoroutine(CO_GrowTree(tree, root, card));
+            StartCoroutine(CO_GrowRootWithCard(tree, root, card));
         }
 
-        private IEnumerator CO_GrowTree(TreeScript tree, RootScript root, CardData card)
+        private IEnumerator CO_GrowRootWithCard(TreeScript tree, RootScript root, CardData card)
         {
             IsWorking = true;
 
-            yield return tree.Grow(root, card);
-            
-            // Check connected trees?
-            
+            yield return tree.GrowRootWithCard(root, card);
+
             IsWorking = false;
         }
 

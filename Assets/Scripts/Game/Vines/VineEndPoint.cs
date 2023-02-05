@@ -66,7 +66,7 @@ namespace Roots
                 
             PreviewExtruder.Range = new Vector2(alpha, 1);
                 
-            PreviewExtruder.FullSize();
+            PreviewExtruder.ForceSize(1);
             PreviewExtruder.GetComponent<MeshRenderer>().material = previewMaterial;
 
             return transform.parent.TransformPoint(PreviewExtruder.Spline.EvaluatePosition(1));
