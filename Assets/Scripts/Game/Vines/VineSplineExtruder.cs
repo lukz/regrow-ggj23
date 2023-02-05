@@ -191,8 +191,13 @@ namespace Roots
         }
 
         public void SetPoints(List<float3> points)
-        {
+        { 
             _points = points;
+            
+            for (var index = 0; index < _points.Count; index++)
+            {
+                _points[index] = new float3(_points[index].x, 0, _points[index].z);
+            }
 
             RebuildSpline();
             RebuildMesh();
