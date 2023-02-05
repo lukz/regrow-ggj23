@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NaughtyAttributes;
 using Roots.SObjects;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Roots
     {
         [SerializeField] private CardData _data;
 
-        [ContextMenu("Save")]
+        [Button("Save")]
         private void Save()
         {
             if (_data == null)
@@ -25,7 +26,7 @@ namespace Roots
             EditorUtility.SetDirty(_data);
         }
 
-        [ContextMenu("Load")]
+        [Button("Load")]
         private void Load()
         {
             if (_data == null)
