@@ -62,6 +62,7 @@ namespace Roots
             {
                 var data = App.instance.appData.data;
                 
+                Debug.Log(position);
                 Debug.Log(Vector3.Distance(treeScript.transform.position, position), vineEndPoint);
                 
                 if (Vector3.Distance(treeScript.transform.position, position) < data.TreeSnappingDistance)
