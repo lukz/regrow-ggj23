@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Roots.SObjects;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Roots
             var prevLength = Extruder.Spline.GetLength();
             
             PreviewExtruder.gameObject.SetActive(true);
-            PreviewExtruder.SetPoints(Extruder.Points);
+            PreviewExtruder.SetPoints(Extruder.Points.ToList());
             
             PreviewExtruder.ScaleRange = new Vector2((PreviewExtruder.ScaleRange.x + PreviewExtruder.ScaleRange.y)/2, PreviewExtruder.ScaleRange.y);
             PreviewExtruder.AppendRotatedPointsKeepSize(shapeData);
@@ -68,7 +69,7 @@ namespace Roots
             PreviewExtruder.FullSize();
             PreviewExtruder.GetComponent<MeshRenderer>().material = previewMaterial;
 
-            return PreviewExtruder.Spline.EvaluatePosition(1);
+            return transform.parent.TransformPoint(PreviewExtruder.Spline.EvaluatePosition(1));
         }
 
         public void StopPreview()

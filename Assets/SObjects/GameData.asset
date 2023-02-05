@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdff8d5d91d41844d9e69432d33124a0, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
+  <TreeSnappingDistance>k__BackingField: 3

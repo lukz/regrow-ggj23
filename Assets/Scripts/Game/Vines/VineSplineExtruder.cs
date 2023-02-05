@@ -136,7 +136,7 @@ namespace Roots
         {
             if (m_Container.Spline == null) 
                 return;
-            
+
             SetPoints(Spline.Select(knot => knot.Position).ToList());
         }
 
