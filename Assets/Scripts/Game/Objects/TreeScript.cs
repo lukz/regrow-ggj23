@@ -114,11 +114,10 @@ namespace Roots
                 
                 var targetPos = new Vector2(4, 0);
                 targetPos = targetPos.SetAngle((360 / CardsToReceive.Count) * index);
-
-                SoundManager.Instance.PlaySound(SoundManager.SFXType.NewCard);
                 
                 DOTween.Sequence()
                     .AppendInterval(0.1f * index)
+                    .AppendCallback(() => SoundManager.Instance.PlaySound(SoundManager.SFXType.NewCard))
                     .Append(sprite.transform.DOLocalMove(new Vector3(targetPos.x, 2, targetPos.y), 1f).SetEase(Ease.OutBack))
                     .Join(sprite.DOFade(1, 1f).SetEase(Ease.OutBack))
                     .Join(sprite.transform.DOScale(0.7f, 1f).SetEase(Ease.OutBack))
