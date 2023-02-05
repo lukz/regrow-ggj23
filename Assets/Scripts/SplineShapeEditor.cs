@@ -23,7 +23,7 @@ namespace Roots
 
             _data.Points = points;
 
-            EditorUtility.SetDirty(_data);
+            // EditorUtility.SetDirty(_data);
         }
 
         [Button("Load")]
