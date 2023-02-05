@@ -53,7 +53,7 @@ namespace Roots
             HideRoots();
         }
 
-        private void SetAlive(bool isStart)
+        public void SetAlive(bool isStart)
         {
             StartCoroutine(CO_SetAlive(isStart));
         }
@@ -84,12 +84,21 @@ namespace Roots
         
         public void GrowInitialRoots(float duration) => roots.ForEach(r => r.GrowFull(duration, 0));
 
-        public void ShowEndPoints() => roots.ForEach(r => r.ShowEndPoint());
+        public void ShowEndPoints()
+        {
+            if(!IsAlive)
+                return;
+            
+            roots.ForEach(r => r.ShowEndPoint());
+        }
 
         public void HideEndPoints() => roots.ForEach(r => r.HideEndPoint());
 
         public List<(VineEndPoint, Vector3)> PreviewEndPoints(CardData cardData) 
-            => roots.Select(r => (r.EndPoint, r.PreviewEndPoint(cardData))).ToList();
+            => roots
+                .Where(r => r.IsAvailableForGrowth)
+                .Select(r => (r.EndPoint, r.PreviewEndPoint(cardData)))
+                .ToList();
 
         public void StopPreviewEndPoints() => roots.ForEach(r => r.StopPreviewEndPoint());
 

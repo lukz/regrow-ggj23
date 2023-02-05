@@ -8,6 +8,8 @@ namespace Roots
     [SelectionBase]
     public class RootScript : MonoBehaviour
     {
+        public bool IsAvailableForGrowth { get; private set; } = true;
+        
         public VineEndPoint EndPoint;
         public VineSplineExtruder Extruder;
         
@@ -33,12 +35,25 @@ namespace Roots
         [ContextMenu("Update End Point")]
         public void UpdateEndPoint() => EndPoint.MoveToEnd();
         
-        public void ShowEndPoint() => EndPoint.Show();
+        public void ShowEndPoint()
+        {
+            if(!IsAvailableForGrowth)
+                return;
+            
+            EndPoint.Show();
+        }
 
         public void HideEndPoint() => EndPoint.Hide();
 
         public Vector3 PreviewEndPoint(CardData cardData) => EndPoint.Preview(cardData);
 
         public void StopPreviewEndPoint() => EndPoint.StopPreview();
+        
+        public void SetConnected()
+        {
+            IsAvailableForGrowth = false;
+            
+            Extruder.StartAnimateFullWidth();
+        }
     }
 }

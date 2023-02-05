@@ -34,6 +34,13 @@ namespace Roots
 
             yield return tree.GrowRootWithCard(root, card);
 
+            var targetDeadTree = GetTreeNearby(root.EndPoint.transform.position);
+            if (targetDeadTree != null && !targetDeadTree.IsAlive)
+            {
+                targetDeadTree.SetAlive(false);
+                root.SetConnected();
+            }
+            
             IsWorking = false;
         }
 
@@ -41,6 +48,9 @@ namespace Roots
         {
             foreach (var treeScript in trees)
             {
+                if(!treeScript.IsAlive)
+                    continue;
+                
                 var endPointTuples = treeScript.PreviewEndPoints(cardData);
 
                 foreach (var (endPoint, endPointPosition) in endPointTuples)
