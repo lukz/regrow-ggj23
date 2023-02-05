@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Roots.SObjects;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Splines;
 
 namespace Roots
 {
@@ -24,10 +21,14 @@ namespace Roots
 
         public void RequestGrowth(CardData card) => OnGrowthRequested?.Invoke(this, card);
         
-        public IEnumerator Grow(CardData card)
+        public IEnumerator GrowWithCard(CardData card)
         {
             yield return EndPoint.Append(card);
         }
+
+        public void ForceHidden() => Extruder.ForceSize(0);
+
+        public void GrowFull(float duration, float delay) => Extruder.StartAnimateFull(duration, delay);
 
         [ContextMenu("Update End Point")]
         public void UpdateEndPoint() => EndPoint.MoveToEnd();

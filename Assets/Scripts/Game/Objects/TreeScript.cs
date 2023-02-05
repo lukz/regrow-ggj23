@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using NaughtyAttributes;
 using Roots.SObjects;
+using TreeEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,15 +14,17 @@ namespace Roots
     public class TreeScript : MonoBehaviour
     {
         [field: Header("Config")]
-        [field: SerializeField] public bool IsAlive { get; private set; }
+        [field: SerializeField] public bool StartAlive { get; private set; }
 
         [Header("Internal references")]
-        [SerializeField] private List<RootScript> roots = new();
+        [SerializeField] private TreeGrower treeModel = new();
+        [SerializeField, ReadOnly] private List<RootScript> roots = new();
         
         [Header("Prefabs")]
         [SerializeField] private RootScript rootPrefab;
         
         public event Action<TreeScript, RootScript, CardData> OnGrowthRequested;
+        public bool IsAlive { get; private set; }
 
         private void Start()
         {
@@ -32,14 +35,54 @@ namespace Roots
             {
                 rootScript.OnGrowthRequested += OnRootGrowthRequested;
             }
+
+            SetNotAlive();
+
+            if (StartAlive)
+            {
+                SetAlive(true);
+            }
+        }
+
+        private void SetNotAlive()
+        {
+            IsAlive = false;
+            
+            treeModel.Shrink(0);
+
+            HideRoots();
+        }
+
+        private void SetAlive(bool isStart)
+        {
+            StartCoroutine(CO_SetAlive(isStart));
+        }
+
+        private IEnumerator CO_SetAlive(bool isStart = false)
+        {
+            IsAlive = true;
+            
+            var growDuration = isStart ? 2 : 1;
+            
+            treeModel.Grow(growDuration);
+            
+            yield return new WaitForSeconds(growDuration);
+            
+            GrowInitialRoots(2);
+            
+            yield return new WaitForSeconds(2);
         }
 
         private void OnRootGrowthRequested(RootScript root, CardData card) => OnGrowthRequested?.Invoke(this, root, card);
 
-        public IEnumerator Grow(RootScript root, CardData card)
+        public IEnumerator GrowRootWithCard(RootScript root, CardData card)
         {
-            yield return root.Grow(card);
+            yield return root.GrowWithCard(card);
         }
+
+        public void HideRoots() => roots.ForEach(r => r.ForceHidden());
+        
+        public void GrowInitialRoots(float duration) => roots.ForEach(r => r.GrowFull(duration, 0));
 
         public void ShowEndPoints() => roots.ForEach(r => r.ShowEndPoint());
 

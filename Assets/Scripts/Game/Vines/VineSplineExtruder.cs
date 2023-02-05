@@ -250,18 +250,18 @@ namespace Roots
             return Math.Abs(a.x - b.x) < tolerance && Math.Abs(a.y - b.y) < tolerance && Math.Abs(a.z - b.z) < tolerance;
         }
 
-        public void StartAnimateFull()
+        public void StartAnimateFull(float duration = 2, float delay = 0)
         {
-            StartCoroutine(AnimateFull());
+            StartCoroutine(AnimateFull(duration, delay));
         }
 
-        private IEnumerator AnimateFull()
+        private IEnumerator AnimateFull(float duration, float delay)
         {
-            yield return DOVirtual.Float(0, 1, 2, value =>
+            yield return DOVirtual.Float(0, 1, duration, value =>
             {
                 m_Range.y = value;
                 RebuildMesh();
-            }).SetEase(Ease.OutSine).WaitForCompletion();
+            }).SetDelay(delay).SetEase(Ease.OutSine).WaitForCompletion();
         }
 
         public void StartAnimateAddition(TweenCallback OnDone)
@@ -278,9 +278,9 @@ namespace Roots
             }).SetEase(Ease.OutSine).WaitForCompletion();
         }
 
-        public void FullSize()
+        public void ForceSize(float sizeScale)
         {
-            m_Range.y = 1;
+            m_Range.y = sizeScale;
             RebuildMesh();
         }
 

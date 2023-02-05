@@ -10,10 +10,8 @@ namespace Roots
 {
     public class TreeGrower : MonoBehaviour
     {
-        public GameObject trunk;
         public GameObject[] leaves;
         private Vector3[] leafScales;
-        public bool startGrown = false;
 
         void Awake()
         {
@@ -21,10 +19,6 @@ namespace Roots
             for (int i = 0; i < leaves.Length; i++)
             {
                 leafScales[i] = leaves[i].transform.localScale;
-            }
-            if (!startGrown)
-            {
-                Shrink(0);
             }
         }
         
@@ -41,6 +35,15 @@ namespace Roots
         [Button("Shrink")]
         public void Shrink(float duration = 1)
         {
+            if (duration == 0)
+            {
+                foreach (var leaf in leaves)
+                {
+                    leaf.transform.localScale = Vector3.zero;
+                }
+                return;
+            }
+            
             foreach (var leaf in leaves)
             {
                 leaf.transform.DOKill();

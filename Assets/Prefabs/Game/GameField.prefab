@@ -570,6 +570,16 @@ PrefabInstance:
       propertyPath: roots.Array.data[2]
       value: 
       objectReference: {fileID: 281547814300320036}
+    - target: {fileID: 8400685933975613075, guid: f06a6236a1b032d4cb32c02c1353cba2,
+        type: 3}
+      propertyPath: <IsAlive>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8400685933975613075, guid: f06a6236a1b032d4cb32c02c1353cba2,
+        type: 3}
+      propertyPath: <StartAlive>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8737732494764421242, guid: f06a6236a1b032d4cb32c02c1353cba2,
         type: 3}
       propertyPath: m_Name
