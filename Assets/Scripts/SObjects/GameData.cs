@@ -9,6 +9,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameData", menuName = "Game/GameData")]
 public class GameData : ScriptableObject
 {
+	[field: SerializeField] 
+	public int TreeSnappingDistance { get; private set; } = 1;
+	
+	
 	public GameState gameState;
 	
 	[Serializable]

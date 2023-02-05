@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using NaughtyAttributes;
 using Roots.SObjects;
 using UnityEditor;
@@ -40,6 +41,15 @@ namespace Roots
             yield return root.Grow(card);
         }
 
+        public void ShowEndPoints() => roots.ForEach(r => r.ShowEndPoint());
+
+        public void HideEndPoints() => roots.ForEach(r => r.HideEndPoint());
+
+        public List<(VineEndPoint, Vector3)> PreviewEndPoints(CardData cardData) 
+            => roots.Select(r => (r.EndPoint, r.PreviewEndPoint(cardData))).ToList();
+
+        public void StopPreviewEndPoints() => roots.ForEach(r => r.StopPreviewEndPoint());
+
 #if UNITY_EDITOR
         [Button("Add root")]
         private void AddRootEditor()
@@ -55,6 +65,5 @@ namespace Roots
             roots.AddRange(GetComponentsInChildren<RootScript>());
         }
 #endif
-
     }
 }

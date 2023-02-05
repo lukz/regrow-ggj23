@@ -30,11 +30,14 @@ namespace Roots
         }
 
         [ContextMenu("Update End Point")]
-        public void UpdateEndPoint()
-        {
-            EndPoint.MoveToEnd();
-        }
+        public void UpdateEndPoint() => EndPoint.MoveToEnd();
         
-        
+        public void ShowEndPoint() => EndPoint.Show();
+
+        public void HideEndPoint() => EndPoint.Hide();
+
+        public Vector3 PreviewEndPoint(CardData cardData) => EndPoint.Preview(cardData);
+
+        public void StopPreviewEndPoint() => EndPoint.StopPreview();
     }
 }

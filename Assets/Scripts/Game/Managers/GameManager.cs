@@ -49,8 +49,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         cardsManager.OnCardUsed += r => EndPlayerTurn();
-
         cardsManager.IsInputLocked += () => playerTurnFinished;
+
+        cardsManager.OnShowEndPointsRequested += treeManager.ShowEndPoints;
+        cardsManager.OnHideEndPointsRequested += treeManager.HideEndPoints;
+        cardsManager.OnPreviewEndPointsRequested += treeManager.PreviewEndPoints;
+        cardsManager.OnStopPreviewEndPointsRequested += treeManager.StopPreviewEndPoints;
         
         
         // camera = App.instance.camera.GetComponent<CameraScript>();

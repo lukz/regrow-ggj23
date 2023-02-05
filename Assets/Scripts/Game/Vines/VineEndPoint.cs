@@ -19,7 +19,6 @@ namespace Roots
         private void Start()
         {
             transform.localScale = new Vector3();
-            FindObjectOfType<CardsManager>().AddEndPoint(this);
         }
 
         public void MoveToEnd()
@@ -50,7 +49,7 @@ namespace Roots
             transform.DOScale(new Vector3(1, 1, 1), .2f);
         }
 
-        public void Preview(CardData shapeData)
+        public Vector3 Preview(CardData shapeData)
         {
             StopPreview();
             var prevLength = Extruder.Spline.GetLength();
@@ -71,7 +70,8 @@ namespace Roots
                 previewExtruder.FullSize();
                 previewExtruder.GetComponent<MeshRenderer>().material = previewMaterial;
             });
-            
+
+            return previewExtruder.Spline.EvaluatePosition(1);
         }
 
         public void StopPreview()

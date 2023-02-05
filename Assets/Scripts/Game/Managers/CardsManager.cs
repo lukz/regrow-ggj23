@@ -9,13 +9,13 @@ namespace Roots
     public class CardsManager : MonoBehaviour
     {
         private CardScript selected;
-        private bool isLocked;
         
-        private List<VineEndPoint> EndPoints = new();
-
         public event Action<CardData> OnCardUsed;
         public event Action<CardData> OnCardAdded;
-        
+        public event Action OnHideEndPointsRequested;
+        public event Action OnShowEndPointsRequested;
+        public event Action<CardData> OnPreviewEndPointsRequested;
+        public event Action OnStopPreviewEndPointsRequested;
         public event Func<bool> IsInputLocked;
         
         void Start()
@@ -93,27 +93,13 @@ namespace Roots
             OnCardAdded?.Invoke(card);
         }
 
-        private void HideEndPoints() => EndPoints.ForEach(point => point.Hide());
+        private void HideEndPoints() => OnHideEndPointsRequested?.Invoke();
 
-        private void ShowEndPoints() => EndPoints.ForEach(point => point.Show());
+        private void ShowEndPoints() => OnShowEndPointsRequested?.Invoke();
 
-        private void PreviewEndPoints(CardData shapeData) => EndPoints.ForEach(point => point.Preview(shapeData));
+        private void PreviewEndPoints(CardData cardData) => OnPreviewEndPointsRequested?.Invoke(cardData);
 
-        private void StopPreviewEndPoints() => EndPoints.ForEach(point => point.StopPreview());
-
-        public void AddEndPoint(VineEndPoint vineEndPoint)
-        {
-            EndPoints.Add(vineEndPoint);
-            if (selected != null)
-            {
-                vineEndPoint.Show();
-                vineEndPoint.Preview(selected.cardData);
-            }
-            else
-            {
-                vineEndPoint.Hide();
-                vineEndPoint.StopPreview();
-            }
-        }
+        private void StopPreviewEndPoints() => OnStopPreviewEndPointsRequested?.Invoke();
+        
     }
 }

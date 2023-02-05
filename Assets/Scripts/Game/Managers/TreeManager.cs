@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Roots.SObjects;
 using UnityEngine;
 
@@ -37,6 +38,45 @@ namespace Roots
             
             IsWorking = false;
         }
-        
+
+        public void PreviewEndPoints(CardData cardData)
+        {
+            foreach (var treeScript in trees)
+            {
+                var endPointTuples = treeScript.PreviewEndPoints(cardData);
+
+                foreach (var (endPoint, endPointPosition) in endPointTuples)
+                {
+                    var nearbyTree = GetTreeNearby(endPointPosition, endPoint, treeScript);
+                    if (nearbyTree != null)
+                    {
+                        Debug.Log("Found tree nearby ", endPoint);
+                    }
+                }
+            }
+        }
+
+        public TreeScript GetTreeNearby(Vector3 position, VineEndPoint vineEndPoint, TreeScript excludeTree = null)
+        {
+            foreach (var treeScript in trees.Where(r => r != excludeTree))
+            {
+                var data = App.instance.appData.data;
+                
+                Debug.Log(Vector3.Distance(treeScript.transform.position, position), vineEndPoint);
+                
+                if (Vector3.Distance(treeScript.transform.position, position) < data.TreeSnappingDistance)
+                {
+                    return treeScript;
+                }
+            }
+
+            return null;
+        }
+
+        public void ShowEndPoints() => trees.ForEach(r => r.ShowEndPoints());
+
+        public void HideEndPoints() => trees.ForEach(r => r.HideEndPoints());
+
+        public void StopPreviewEndPoints() => trees.ForEach(r => r.StopPreviewEndPoints());
     }
 }
