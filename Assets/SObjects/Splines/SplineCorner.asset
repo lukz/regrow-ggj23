@@ -27,3 +27,5 @@ MonoBehaviour:
     z: 2.8108
   <StartingAngle>k__BackingField: 270
   <CardName>k__BackingField: Card A
+  <Icon>k__BackingField: {fileID: 2800000, guid: 4f339b2a115914b3dad933fea509a901,
+    type: 3}

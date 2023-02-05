@@ -26,6 +26,7 @@ namespace Roots
             this.cardData = cardData;
             Uses += 1;
             UpdateText();
+            Image.sprite = Sprite.Create(cardData.Icon, new Rect(new Vector2(0, 0), new Vector2(512, 512)), new Vector2(256, 256));
         }
 
         public void OnClicked()
@@ -46,7 +47,8 @@ namespace Roots
 
         private void UpdateText()
         {
-            Text.SetText(cardData.CardName + " " + Uses);
+            // Text.SetText(cardData.CardName + " " + Uses);
+            Text.SetText("x " + Uses);
         }
     }
 }
