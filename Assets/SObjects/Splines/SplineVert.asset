@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 109c3666f4c843499f5d82a8e259cb53, type: 3}
-  m_Name: SplineCorner
+  m_Name: SplineVert
   m_EditorClassIdentifier: 
   <Points>k__BackingField:
   - x: 0
     y: 0
     z: 0
-  - x: 0.3
-    y: -0.16
-    z: 1.5
-  - x: 1.26
-    y: -0.35
-    z: 2.6908
-  - x: 3.03
-    y: -0.28
-    z: 2.8108
+  - x: 0.81
+    y: 0
+    z: 0.12
+  - x: 1.64
+    y: 0
+    z: -0.07
+  - x: 2.53
+    y: 0
+    z: 0
   <StartingAngle>k__BackingField: 270
-  <CardName>k__BackingField: Card A
-  <Icon>k__BackingField: {fileID: 2800000, guid: 4f339b2a115914b3dad933fea509a901,
+  <CardName>k__BackingField: Card S
+  <Icon>k__BackingField: {fileID: 2800000, guid: 7864eeecc0e4e4845905d038cabc5a77,
     type: 3}

@@ -21,7 +21,7 @@ namespace Roots
         void Start()
         {
             var cards = App.instance.appData.assets.Cards;
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < 20; i++)
             {
                 AddCard(cards[i % cards.Count]);
             }

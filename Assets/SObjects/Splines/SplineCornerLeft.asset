@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109c3666f4c843499f5d82a8e259cb53, type: 3}
+  m_Name: SplineCornerLeft
+  m_EditorClassIdentifier: 
+  <Points>k__BackingField:
+  - x: 0.02
+    y: 0
+    z: 0
+  - x: -0.18
+    y: 0
+    z: 1.61
+  - x: -1.08
+    y: 0
+    z: 2.66
+  - x: -3.01
+    y: 0
+    z: 2.81
+  <StartingAngle>k__BackingField: 270
+  <CardName>k__BackingField: Card A
+  <Icon>k__BackingField: {fileID: 2800000, guid: 3447543a1863d4dcea6f10d6d0ceaabc,
+    type: 3}
